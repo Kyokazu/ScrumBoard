@@ -1,6 +1,9 @@
 const User = require("../models/user");
+const mongoose = require("mongoose");
 
-const User = async(req, res, next) => {
+const user = async(req, res, next) => {
+    const validId = mongoose.Types.ObjectId.isValid(req.user._id);
+    if (!validId) return res.status(400).send("Process failed: Invalid id");
 
     const user = await User.findById(req.user.id);
 
@@ -8,7 +11,6 @@ const User = async(req, res, next) => {
         return res.status(400).send("Process failed: User without permissions");
     }
     next();
-
-}
+};
 
 module.exports = user;
